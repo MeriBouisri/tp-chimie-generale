@@ -31,7 +31,7 @@ public class PeriodicTable {
 				.get();
 	}
 	
-	public Element forMass(double atomicMass) {
+	public Element forMass(float atomicMass) {
 		return elementList.stream()
 				.filter(x -> x.getAtomicMass() == atomicMass)
 				.findAny()
@@ -52,13 +52,17 @@ public class PeriodicTable {
 	 */
 	public  void readElementList() {
 		boolean firstLine = true;
+		
+		// Fixed bug
+		// gotta assign bf.readLine() to variable
+ 		String info;
 
 		try (BufferedReader bf = new BufferedReader(new FileReader("elements.csv"))) {
-		    while (bf.readLine() != null) {
+		    while ((info = bf.readLine()) != null) { 
 		    	if (firstLine) { firstLine = false; continue; } // Skip header
 		 
 		    	// Créer un nouvel élément pour chaque ligne de données
-		    	elementList.add(new Element(bf.readLine().split(";")));
+		    	elementList.add(new Element(info.split(";")));
 		    }
 		} catch (IOException e) {
 			e.printStackTrace();
