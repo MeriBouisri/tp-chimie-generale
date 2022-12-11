@@ -1,39 +1,36 @@
 package projetChimie;
 
+/**
+ * @author Merieme Bouisri
+ */
 public class Element {
-	
+
 	private int atomicNumber;
 	private String name;
 	private String symbol;
 	private double atomicMass;
 	
-	public Element(int atomicNumber, String name, String symbol, double atomicMass) {
-		this.atomicNumber = atomicNumber;
-		this.name = name;
-		this.symbol = symbol;
-		this.atomicMass = atomicMass;
-	}
+	private int electronNumber;
 	
-	public void setAtomicNumber(int atomicNumber) {
-		this.atomicNumber = atomicNumber;
-	}
-	
-	public void setAtomicMass(double atomicMass) {
-		this.atomicMass = atomicMass;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	/**
+	 * Constructeur permettant d'initialiser un élément à partir des 
+	 * valeurs contenues dans un tableau de données.
+	 * @param elementInfo
+	 */
+	public Element(String[] elementInfo) {
+		this.atomicNumber = Integer.parseInt(elementInfo[0]);
+		this.name = elementInfo[1];
+		this.symbol = elementInfo[2];
+		this.atomicMass = Double.parseDouble(elementInfo[3]);
+		
+		// Élément initialisé avec une charge nulle
+		//this.electronNumber = atomicNumber;
 	}
 	
 	public int getAtomicNumber() {
 		return atomicNumber;
 	}
-	
+
 	public double getAtomicMass() {
 		return atomicMass;
 	}
@@ -46,7 +43,15 @@ public class Element {
 		return symbol;
 	}
 	
-
+	public int getElectrons() {
+		return electronNumber;
+	}
 	
+	public void setCharge(int charge) {
+		this.electronNumber = atomicNumber - charge;
+	}
 	
+	public int getCharge() {
+		return atomicNumber - electronNumber;
+	}
 }
