@@ -8,7 +8,7 @@ public class Element {
 	private int atomicNumber;
 	private String name;
 	private String symbol;
-	private double atomicMass;
+	private float atomicMass;
 	
 	private int electronNumber;
 	
@@ -21,17 +21,17 @@ public class Element {
 		this.atomicNumber = Integer.parseInt(elementInfo[0]);
 		this.name = elementInfo[1];
 		this.symbol = elementInfo[2];
-		this.atomicMass = Double.parseDouble(elementInfo[3]);
+		this.atomicMass = Float.parseFloat(elementInfo[3]);
 		
 		// Élément initialisé avec une charge nulle
-		//this.electronNumber = atomicNumber;
+		this.electronNumber = atomicNumber;
 	}
 	
 	public int getAtomicNumber() {
 		return atomicNumber;
 	}
 
-	public double getAtomicMass() {
+	public float getAtomicMass() {
 		return atomicMass;
 	}
 	
