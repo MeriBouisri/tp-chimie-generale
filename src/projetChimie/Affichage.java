@@ -24,7 +24,7 @@ public class Affichage {
 			System.out.print( "Quel est votre cation?");
 			String cations = input.nextLine();
 			
-			System.out.print("Quel est le nombre de cations?");
+			System.out.print("Combien avez vous de cation?");
 			double nb_cation  = input.nextDouble();
 			
 			System.out.print("Quel est la charge de votre cation?");
