@@ -4,18 +4,19 @@ package projetChimie;
  * @author Merieme Bouisri
  */
 public class Element {
-
-	private int atomicNumber;
-	private String name;
-	private String symbol;
-	private float atomicMass;
+	
+	private final int atomicNumber;
+	private final String name;
+	private final String symbol;
+	private final float atomicMass;
 	
 	private int electronNumber;
 	
 	/**
-	 * Constructeur permettant d'initialiser un élément à partir des 
-	 * valeurs contenues dans un tableau de données.
-	 * @param elementInfo
+	 * Constructeur permettant d'initialiser un element a partir des 
+	 * valeurs contenues dans un tableau de données. Les indices du 
+	 * tableau représentent la colonne de chaque attribut.
+	 * @param elementInfo Tableau de données. 
 	 */
 	public Element(String[] elementInfo) {
 		this.atomicNumber = Integer.parseInt(elementInfo[0]);
@@ -30,7 +31,7 @@ public class Element {
 	public int getAtomicNumber() {
 		return atomicNumber;
 	}
-
+	
 	public float getAtomicMass() {
 		return atomicMass;
 	}
@@ -53,5 +54,9 @@ public class Element {
 	
 	public int getCharge() {
 		return atomicNumber - electronNumber;
+	}
+	
+	public void resetCharge() {
+		this.electronNumber = atomicNumber;
 	}
 }
