@@ -32,7 +32,7 @@ public class Affichage {
 			pt.forSymbol(cations).setCharge(nb_charge);
 			
 			int nb_electron = pt.forSymbol(cations).getElectrons();
-			double nx = (nb_cation* nb_electron);
+			double nx = calculMole(nb_cation, nb_electron);
 			double Nx = calcul.getNumberOf(nx);
 
 			System.out.print("Le nombre d'électrons dans " + nb_cation  + " ions "+ cations + "est de  "+ Nx);
