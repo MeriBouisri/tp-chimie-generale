@@ -6,7 +6,6 @@ package projetChimie;
 import java.util.Scanner;
 
 /**
- * @author merie
  * @author noé
  */
 public class Affichage {
