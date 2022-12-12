@@ -16,7 +16,7 @@ public class Affichage {
 		System.out.print( "Quel est votre cation?");
 		String cations = input.nextLine();
 		
-		System.out.print("Quel est la charge de votre cations?");
+		System.out.print("Quel est la charge de votre cation?");
 		int nb_charge = input.nextInt();
 		pt.forSymbol(cations).setCharge(nb_charge);
 		
