@@ -6,23 +6,23 @@ package projetChimie;
 public class Element {
 	
 	private final int atomicNumber;
+	private final float atomicMass;
 	private final String name;
 	private final String symbol;
-	private final float atomicMass;
 	
 	private int electronNumber;
 	
 	/**
-	 * Constructeur permettant d'initialiser un element a partir des 
+	 * Constructeur permettant d'initialiser un élément à partir des 
 	 * valeurs contenues dans un tableau de données. Les indices du 
 	 * tableau représentent la colonne de chaque attribut.
 	 * @param elementInfo Tableau de données. 
 	 */
 	public Element(String[] elementInfo) {
 		this.atomicNumber = Integer.parseInt(elementInfo[0]);
-		this.name = elementInfo[1];
-		this.symbol = elementInfo[2];
-		this.atomicMass = Float.parseFloat(elementInfo[3]);
+		this.atomicMass = Float.parseFloat(elementInfo[1]);
+		this.name = elementInfo[2];
+		this.symbol = elementInfo[3];
 		
 		// Élément initialisé avec une charge nulle
 		this.electronNumber = atomicNumber;
