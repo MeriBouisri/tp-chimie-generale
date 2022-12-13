@@ -5,44 +5,39 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
-/**
- * @author Merieme Bouisri
- */
 public class PeriodicTable {
 	
-	ArrayList<Element> elementList = new ArrayList<Element>();
+	private ArrayList<Element> elementList = new ArrayList<Element>();
 
 	public PeriodicTable() {
 		readElementList();
 	}
 	
-	public Element forNumber(int atomicNumber) {
+	private Element searchElement(Predicate<Element> predicate) {
 		return elementList.stream()
-				.filter(x -> x.getAtomicNumber() == atomicNumber)
+				.filter(predicate)
 				.findAny()
 				.get();
+	}
+	
+	// Méthodes d'accès à un élément selon l'un de ses attributs
+	
+	public Element forNumber(int atomicNumber) {
+		return searchElement(element -> element.getAtomicNumber() == atomicNumber);
 	}
 	
 	public Element forName(String name) {
-		return elementList.stream()
-				.filter(x -> x.getName().equalsIgnoreCase(name))
-				.findAny()
-				.get();
+		return searchElement(element -> element.getName().equalsIgnoreCase(name));
 	}
 	
 	public Element forMass(float atomicMass) {
-		return elementList.stream()
-				.filter(x -> x.getAtomicMass() == atomicMass)
-				.findAny()
-				.get();
+		return searchElement(element -> element.getAtomicMass() == atomicMass);
 	}
 	
 	public Element forSymbol(String symbol) {
-		return elementList.stream()
-				.filter(x -> x.getSymbol().equals(symbol))
-				.findAny()
-				.get();
+		return searchElement(element -> element.getSymbol().equalsIgnoreCase(symbol));
 	}
 	
 	/**
