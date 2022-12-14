@@ -13,18 +13,18 @@ public class Element {
 	private int electronNumber;
 	
 	/**
-	 * Constructeur permettant d'initialiser un élément à partir des 
-	 * valeurs contenues dans un tableau de données. Les indices du 
-	 * tableau représentent la colonne de chaque attribut.
-	 * @param elementInfo Tableau de données. 
+	 * Constructeur permettant d'initialiser un élément avec un charge neutre.
+	 * @param atomicNumber numéro atomique de l'élément
+	 * @param atomicMass masse atomique de l'élément
+	 * @param name nom de l'élément
+	 * @param symbol symbole de l'élément
 	 */
-	public Element(String[] elementInfo) {
-		this.atomicNumber = Integer.parseInt(elementInfo[0]);
-		this.atomicMass = Float.parseFloat(elementInfo[1]);
-		this.name = elementInfo[2];
-		this.symbol = elementInfo[3];
+	public Element(int atomicNumber, float atomicMass, String name, String symbol) {
+		this.atomicNumber = atomicNumber;
+		this.atomicMass = atomicMass;
+		this.name = name;
+		this.symbol = symbol;
 		
-		// Élément initialisé avec une charge nulle
 		this.electronNumber = atomicNumber;
 	}
 	
@@ -59,4 +59,5 @@ public class Element {
 	public void resetCharge() {
 		this.electronNumber = atomicNumber;
 	}
+	
 }
