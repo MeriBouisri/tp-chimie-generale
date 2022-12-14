@@ -1,4 +1,3 @@
-
 package projetChimie;
 
 import java.io.BufferedReader;
@@ -28,12 +27,12 @@ public class PeriodicTable {
 		return searchElement(element -> element.getAtomicNumber() == atomicNumber);
 	}
 	
-	public Element forName(String name) {
-		return searchElement(element -> element.getName().equalsIgnoreCase(name));
-	}
-	
 	public Element forMass(float atomicMass) {
 		return searchElement(element -> element.getAtomicMass() == atomicMass);
+	}
+	
+	public Element forName(String name) {
+		return searchElement(element -> element.getName().equalsIgnoreCase(name));
 	}
 	
 	public Element forSymbol(String symbol) {
@@ -56,8 +55,14 @@ public class PeriodicTable {
 		    while ((info = bf.readLine()) != null) { 
 		    	if (firstLine) { firstLine = false; continue; } // Skip header
 		 
-		    	// Créer un nouvel élément pour chaque ligne de données
-		    	elementList.add(new Element(info.split(";")));
+		    	String[] infoArray = info.split(";");
+		    	
+		    	elementList.add(new Element(
+		    			Integer.parseInt(infoArray[0]), // Numéro atomique
+		    			Float.parseFloat(infoArray[1]), // Masse atomique
+		    			infoArray[2],					// Nom de l'élément
+		    			infoArray[3]					// Symbole de l'élément
+		    			));
 		    }
 		} catch (IOException e) {
 			e.printStackTrace();
