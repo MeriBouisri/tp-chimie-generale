@@ -1,61 +1,18 @@
-package projetChimie;
+package controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.math.BigDecimal;;
 
 public class CalculMole {
 
 	private final double CONST_AVOGADRO = 6.022E23;
 	
-	// Constantes qui decrivent les 4 variables possibles
-	public final int ELECTRON = 0;
-	public final int ION = 1;
-	public final int MOL = 0;
-	public final int NUM = 1;
-	
-	private double unknown;
-	
-	private double[][] var;
-	
 	public CalculMole() {
-		var = new double[2][2];
-	}
-	
-	public void setVariable(int specie, int unit, double value) {
-		var[specie][unit] = value;
-	}
-	
-	public void setUnknown(int specie, int unit) {
-		this.unknown = var[specie][unit];
-	}
-	
-	public double getValueOf(int specie, int unit) {
-		return var[specie][unit];
-	}
-	
-	// Produits croisés
-	//TODO: optimiser cette methode
-	public double findUnknown() {
-		double result = 0;
-		if (unknown == var[ELECTRON][MOL]) {
-			result = (var[ELECTRON][NUM] * var[ION][MOL]) / var[ION][NUM];
-		}
 		
-		if (unknown == var[ELECTRON][NUM]) {
-			result = (var[ELECTRON][MOL] * var[ION][NUM]) / var[ION][MOL];
-		}
-		if (unknown == var[ION][MOL]) {
-			result = (var[ELECTRON][MOL] * var[ION][NUM]) / var[ELECTRON][NUM];
-		}
-		
-		if (unknown == var[ION][NUM]) {
-			result = (var[ELECTRON][NUM] * var[ION][MOL]) / var[ELECTRON][MOL];
-		}
-		
-		return setSigFig(result, 2);
 	}
-	
+
 	public double getNumberOf(double baseUnit) {
 		return baseUnit * CONST_AVOGADRO;
 	}
@@ -64,16 +21,36 @@ public class CalculMole {
 		return numberUnit / CONST_AVOGADRO;
 	}
 	
-	public double calculMole(double numberUnit, int molElectron) {
-		return numberUnit * molElectron;
+	public double calculNombreIon(double nbMolIon, int molElectron) {
+		return nbMolIon * molElectron;
+	}
+	
+	public double calculNombreElectron(double nbMolElectron, int molElectron) {
+		return nbMolElectron / molElectron;
 	}
 	
 	/**
 	 * @return resultat arrondi au nombre de chiffres significatifs donne
 	 */
-	public double setSigFig(double resultat, int sigFig) {
+	public double setSigFig(double resultat, boolean notationScientifique, int sigFig) {
+		double formattedDouble;
 		double precision = Math.pow(10, sigFig);
-		return Math.round(resultat * precision) / precision;
+		try {
+			if (notationScientifique) {
+				String[] separateDouble = String.valueOf(resultat).split("E");
+				double valueRound = Double.parseDouble(separateDouble[0]);
+				separateDouble[0] = String.valueOf(Math.round(valueRound * precision) / precision);
+				formattedDouble = Double.parseDouble(separateDouble[0] + "E" + separateDouble[1]);
+			} else {
+			formattedDouble = Math.round(resultat * precision) / precision;
+			}}
+		catch (IndexOutOfBoundsException e) {
+			formattedDouble = Math.round(resultat * precision) / precision;
+		}
+		
+		// Reconstruire le double
+		
+		return formattedDouble;
 	}
 
 	
