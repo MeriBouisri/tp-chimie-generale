@@ -1,4 +1,4 @@
-package projetChimie;
+package model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -61,8 +61,8 @@ public class PeriodicTable {
 		    			Integer.parseInt(infoArray[0]), // Numéro atomique
 		    			Float.parseFloat(infoArray[1]), // Masse atomique
 		    			infoArray[2],					// Nom de l'élément
-		    			infoArray[3]					// Symbole de l'élément
-		    			));
+		    			infoArray[3])					// Symbole de l'élément
+		    			);
 		    }
 		} catch (IOException e) {
 			e.printStackTrace();

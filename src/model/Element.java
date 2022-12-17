@@ -1,4 +1,4 @@
-package projetChimie;
+package model;
 
 /**
  * @author Merieme Bouisri
@@ -13,7 +13,7 @@ public class Element {
 	private int electronNumber;
 	
 	/**
-	 * Constructeur permettant d'initialiser un élément avec un charge neutre.
+	 * Constructeur permettant d'initialiser un élément avec une charge neutre.
 	 * @param atomicNumber numéro atomique de l'élément
 	 * @param atomicMass masse atomique de l'élément
 	 * @param name nom de l'élément

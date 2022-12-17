@@ -24,6 +24,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
@@ -41,15 +43,27 @@ import javax.swing.UIManager;
  * @author merie
  *
  */
-public class MainFrame extends UserInput implements ActionListener, MouseListener {
-
+public class MainFrame extends EventHandler {
+	
 	private JFrame frame;
-	private JPanel elementSelectionPane;
-	private JComboBox<String> elementComboBox;
+	private JPanel inputPane;
+	private JComboBox<String> searchTypeBox;
+	
 	private JTextField elementField;
 	private JTextField chargeField;
+	private JTextField knownVariableField;
+	private JTextField moleIonField;
+	private JTextField nbMoleIonField;
+	private JTextField moleElectronField;
+	private JTextField nbMoleElectronField;
+	private JTextField unknownVariableField;
+	
 	private JButton addChargeButton;
-	private JButton substractChargeButton;
+	private JButton subtractChargeButton;
+	private JButton confirmButton;
+	private JButton convertButton;
+	private JButton resetButton;
+	private JButton[] buttonList = { addChargeButton, subtractChargeButton,confirmButton, convertButton, resetButton};
 	
 	// Remove later
 	public int type;
@@ -61,42 +75,24 @@ public class MainFrame extends UserInput implements ActionListener, MouseListene
 	
 	private JLabel elementSelectionLabel;
 	private JLabel chargeLabel;
-	private JButton testButton;
-	private JPanel panel;
-	private JButton convertButton;
-	private JTextField moleIonField;
-	private JTextField nbMoleIonField;
-	private JTextField moleElectronField;
-	private JTextField nbMoleElectronsField;
-	private JTextField unknownVariableField;
-	private JLabel lblNewLabel;
-	private JLabel lblMollectrons;
-	private JLabel lblNewLabel_1;
-	private JTextField knownVariableField;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JLabel lblMollectrons_1;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_5;
-	private JComboBox<String> entiteBox;
-	private JLabel lblNewLabel_6;
+	private JLabel molIonLabel;
+	private JLabel molElectronLabel;
+	private JLabel separatorLabel;
+	private JLabel knownVariableInputLabel;
+	private JLabel nbMolIonLabel;
+	private JLabel nbMolElectronLabel;
+	private JLabel convertLabel;
+	private JLabel separatorLabel2;
+	private JLabel numberOfKnownLabel;
+	
+	
+	private JPanel calculationPanel;
+	private JComboBox<String> entityTypeBox;
+	
 	private int clickCount = 0;
-	private JButton resetButton;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame window = new MainFrame();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -105,250 +101,260 @@ public class MainFrame extends UserInput implements ActionListener, MouseListene
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 538, 394);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		elementSelectionPane = new JPanel();
-		elementSelectionPane.setBackground(new Color(255, 255, 255));
-		elementSelectionPane.setBounds(0, 0, 522, 193);
-		frame.getContentPane().add(elementSelectionPane, BorderLayout.NORTH);
-		elementSelectionPane.setLayout(null);
 		
-		elementComboBox = new JComboBox<String>();
-		elementComboBox.setOpaque(false);
+		//------------------------------------------------------
+		//              CREATING PANELS
+		//------------------------------------------------------
+		inputPane = new JPanel();
+		inputPane.setBackground(new Color(255, 255, 255));
+		inputPane.setBounds(0, 0, 522, 198);
+		frame.getContentPane().add(inputPane, BorderLayout.NORTH);
+		inputPane.setLayout(null);
+		
+		calculationPanel = new JPanel();
+		calculationPanel.setBounds(0, 195, 522, 118);
+		frame.getContentPane().add(calculationPanel);
+		calculationPanel.setLayout(null);
+		
+		//------------------------------------------------------
+		//                 CREATING COMBO BOX
+		//------------------------------------------------------
 		String[] searchType = getSearchType();
-		elementComboBox.setModel(new DefaultComboBoxModel<String>(searchType));
-		elementComboBox.setBounds(144, 33, 116, 22);
-		elementComboBox.addActionListener(this);
-		elementSelectionPane.add(elementComboBox);
+		String[] entityType = getEntityList();
 		
+		searchTypeBox = new JComboBox<String>();
+		searchTypeBox.setOpaque(false);
+		searchTypeBox.setModel(new DefaultComboBoxModel<String>(searchType));
+		searchTypeBox.setBounds(144, 33, 116, 22);
+		inputPane.add(searchTypeBox);
+		
+		entityTypeBox = new JComboBox<String>();
+		entityTypeBox.setModel(new DefaultComboBoxModel<String>(entityType));
+		entityTypeBox.setBounds(176, 127, 97, 22);
+		inputPane.add(entityTypeBox);
+		
+		//--------------------------------------------------------
+		//                 CREATING INPUT TEXT FIELDS
+		//--------------------------------------------------------
 		elementField = new JTextField();
-		elementField.addActionListener(this);
 		elementField.setBounds(144, 60, 116, 22);
-		elementSelectionPane.add(elementField);
+		inputPane.add(elementField);
 		elementField.setColumns(10);
 		
+		knownVariableField = new JTextField();
+		knownVariableField.setFont(UIManager.getFont("Button.font"));
+		knownVariableField.setBounds(283, 128, 127, 20);
+		inputPane.add(knownVariableField);
+		knownVariableField.setColumns(10);
+		
+		//--------------------------------------------------------------
+		//                    CREATE BUTTONS
+		//--------------------------------------------------------------
 		addChargeButton = new JButton("▲");
-		addChargeButton.addMouseListener(this);
 		addChargeButton.setMargin(new Insets(2, 2, 2, 2));
 		addChargeButton.setToolTipText("Augmenter la charge");
 		addChargeButton.setBorderPainted(false);
 		addChargeButton.setBackground(new Color(137, 192, 237));
 		addChargeButton.setBounds(318, 34, 25, 21);
-		elementSelectionPane.add(addChargeButton);
+		inputPane.add(addChargeButton);
 		
+		subtractChargeButton = new JButton("▼");
+		subtractChargeButton.setAlignmentX(0.5f);
+		subtractChargeButton.setMargin(new Insets(2, 2, 2, 2));
+		subtractChargeButton.setToolTipText("Diminuer la charge");
+		subtractChargeButton.setBorderPainted(false);
+		subtractChargeButton.setBackground(new Color(237, 137, 157));
+		subtractChargeButton.setBounds(318, 61, 25, 21);
+		inputPane.add(subtractChargeButton);
+		
+		confirmButton = new JButton("CALCULER");
+		confirmButton.setBounds(222, 159, 114, 23);
+		inputPane.add(confirmButton);
+		
+		convertButton = new JButton("Convertir en nombre");
+		convertButton.setBounds(318, 90, 173, 23);
+		calculationPanel.add(convertButton);
+	
+		resetButton = new JButton("RESET");
+		resetButton.setBounds(226, 324, 89, 23);
+		frame.getContentPane().add(resetButton);
+		
+		//-----------------------------------------------------------
+		//               CREATING DISPLAY TEXT FIELDS
+		//-----------------------------------------------------------
 		chargeField = new JTextField();
-		chargeField.setText(String.valueOf(getInputCharge()));
+		chargeField.setText("0");
 		chargeField.setName("");
 		chargeField.setEditable(false);
 		chargeField.setBounds(353, 33, 30, 49);
-		elementSelectionPane.add(chargeField);
+		inputPane.add(chargeField);
 		chargeField.setColumns(10);
 		
-		substractChargeButton = new JButton("▼");
-		substractChargeButton.setAlignmentX(0.5f);
-		substractChargeButton.setMargin(new Insets(2, 2, 2, 2));
-		substractChargeButton.setToolTipText("Diminuer la charge");
-		substractChargeButton.setBorderPainted(false);
-		substractChargeButton.setBackground(new Color(237, 137, 157));
-		substractChargeButton.setBounds(318, 61, 25, 21);
-		substractChargeButton.addMouseListener(this);
-		elementSelectionPane.add(substractChargeButton);
-		
-		elementSelectionLabel = new JLabel("Séléctionnez un élément");
-		elementSelectionLabel.setBounds(144, 11, 164, 22);
-		elementSelectionPane.add(elementSelectionLabel);
-		
-		chargeLabel = new JLabel("Charge");
-		chargeLabel.setBounds(329, 15, 46, 14);
-		elementSelectionPane.add(chargeLabel);
-		
-		knownVariableField = new JTextField();
-		knownVariableField.setFont(UIManager.getFont("Button.font"));
-		knownVariableField.setBounds(283, 128, 127, 20);
-		elementSelectionPane.add(knownVariableField);
-		knownVariableField.setColumns(10);
-		
-		testButton = new JButton("CALCULER");
-		testButton.setBounds(222, 159, 114, 23);
-		elementSelectionPane.add(testButton);
-		
-		lblNewLabel_2 = new JLabel("Entrez la valeur de la variable connue");
-		lblNewLabel_2.setBounds(187, 103, 257, 14);
-		elementSelectionPane.add(lblNewLabel_2);
-		
-		
-		entiteBox = new JComboBox<String>();
-		String[] entityType = getEntityList();
-		entiteBox.setModel(new DefaultComboBoxModel<String>(entityType));
-		entiteBox.setBounds(176, 127, 97, 22);
-		elementSelectionPane.add(entiteBox);
-		
-		lblNewLabel_6 = new JLabel("Nombre de");
-		lblNewLabel_6.setBounds(103, 131, 79, 14);
-		elementSelectionPane.add(lblNewLabel_6);
-		testButton.addMouseListener(this);
-		
-		panel = new JPanel();
-		panel.setBounds(0, 195, 522, 118);
-		frame.getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		convertButton = new JButton("Convertir en nombre");
-		convertButton.addMouseListener(this);
-		convertButton.setBounds(318, 90, 173, 23);
-		panel.add(convertButton);
+		unknownVariableField = new JTextField();
+		unknownVariableField.setEditable(false);
+		unknownVariableField.setBounds(222, 91, 86, 20);
+		calculationPanel.add(unknownVariableField);
+		unknownVariableField.setColumns(10);
 		
 		moleIonField = new JTextField();
-		moleIonField.setText("1");
+		moleIonField.setEditable(false);
 		moleIonField.setBounds(110, 11, 23, 20);
-		panel.add(moleIonField);
+		calculationPanel.add(moleIonField);
 		moleIonField.setColumns(10);
 		
 		nbMoleIonField = new JTextField();
+		nbMoleIonField.setEditable(false);
 		nbMoleIonField.setColumns(10);
 		nbMoleIonField.setBounds(93, 42, 63, 20);
-		panel.add(nbMoleIonField);
+		calculationPanel.add(nbMoleIonField);
 		
 		moleElectronField = new JTextField();
+		moleElectronField.setEditable(false);
 		moleElectronField.setColumns(10);
 		moleElectronField.setBounds(341, 11, 23, 20);
-		panel.add(moleElectronField);
+		calculationPanel.add(moleElectronField);
 		
-		nbMoleElectronsField = new JTextField();
-		nbMoleElectronsField.setColumns(10);
-		nbMoleElectronsField.setBounds(324, 42, 63, 20);
-		panel.add(nbMoleElectronsField);
+		nbMoleElectronField = new JTextField();
+		nbMoleElectronField.setEditable(false);
+		nbMoleElectronField.setColumns(10);
+		nbMoleElectronField.setBounds(324, 42, 63, 20);
+		calculationPanel.add(nbMoleElectronField);
 		
-		unknownVariableField = new JTextField();
-		unknownVariableField.setBounds(203, 91, 86, 20);
-		panel.add(unknownVariableField);
-		unknownVariableField.setColumns(10);
+		//-----------------------------------------------------------
+		//                   CREATING LABELS
+		//-----------------------------------------------------------
+		elementSelectionLabel = new JLabel("Séléctionnez un élément");
+		elementSelectionLabel.setBounds(144, 11, 164, 22);
+		inputPane.add(elementSelectionLabel);
 		
-		lblNewLabel = new JLabel("mol ion");
-		lblNewLabel.setBounds(143, 14, 46, 14);
-		panel.add(lblNewLabel);
+		chargeLabel = new JLabel("Charge");
+		chargeLabel.setBounds(329, 15, 46, 14);
+		inputPane.add(chargeLabel);
 		
-		lblMollectrons = new JLabel("mol électrons");
-		lblMollectrons.setBounds(372, 14, 94, 14);
-		panel.add(lblMollectrons);
+		knownVariableInputLabel = new JLabel("Entrez la valeur de la variable connue");
+		knownVariableInputLabel.setBounds(187, 103, 257, 14);
+		inputPane.add(knownVariableInputLabel);
 		
-		lblNewLabel_1 = new JLabel(".................................................");
-		lblNewLabel_1.setBounds(180, 14, 148, 14);
-		panel.add(lblNewLabel_1);
+		numberOfKnownLabel = new JLabel("Nombre de");
+		numberOfKnownLabel.setBounds(103, 131, 79, 14);
+		inputPane.add(numberOfKnownLabel);
 		
-		lblNewLabel_3 = new JLabel("mol ion");
-		lblNewLabel_3.setBounds(166, 45, 46, 14);
-		panel.add(lblNewLabel_3);
+		molIonLabel = new JLabel("mol ion");
+		molIonLabel.setBounds(143, 14, 46, 14);
+		calculationPanel.add(molIonLabel);
 		
-		lblMollectrons_1 = new JLabel("mol électrons");
-		lblMollectrons_1.setBounds(397, 45, 94, 14);
-		panel.add(lblMollectrons_1);
+		molElectronLabel = new JLabel("mol électrons");
+		molElectronLabel.setBounds(372, 14, 94, 14);
+		calculationPanel.add(molElectronLabel);
 		
-		lblNewLabel_4 = new JLabel("Nombre de moles d'inconnue :");
-		lblNewLabel_4.setBounds(29, 94, 183, 14);
-		panel.add(lblNewLabel_4);
+		separatorLabel = new JLabel(".................................................");
+		separatorLabel.setBounds(180, 14, 148, 14);
+		calculationPanel.add(separatorLabel);
 		
-		lblNewLabel_5 = new JLabel(".................................................");
-		lblNewLabel_5.setBounds(203, 45, 111, 14);
-		panel.add(lblNewLabel_5);
+		nbMolIonLabel = new JLabel("mol ion");
+		nbMolIonLabel.setBounds(166, 45, 46, 14);
+		calculationPanel.add(nbMolIonLabel);
 		
-		resetButton = new JButton("RESET");
-		resetButton.addMouseListener(this);
-		resetButton.setBounds(226, 324, 89, 23);
-		frame.getContentPane().add(resetButton);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
- 		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
+		nbMolElectronLabel = new JLabel("mol électrons");
+		nbMolElectronLabel.setBounds(397, 45, 94, 14);
+		calculationPanel.add(nbMolElectronLabel);
 		
-		if (e.getSource() == addChargeButton) {
-			onAddCharge();
-			chargeField.setText(String.valueOf(getInputCharge()));
-			
-		}
+		convertLabel = new JLabel("Nombre de moles d'inconnue :");
+		convertLabel.setBounds(48, 94, 183, 14);
+		calculationPanel.add(convertLabel);
 		
-		if (e.getSource() == substractChargeButton) {
-			onSubstractCharge();
-			chargeField.setText(String.valueOf(getInputCharge()));
-			
-		}
+		separatorLabel2 = new JLabel(".................................................");
+		separatorLabel2.setBounds(203, 45, 111, 14);
+		calculationPanel.add(separatorLabel2);
 		
-		if (e.getSource() == testButton) {
-			JTextField[] fieldList = { nbMoleElectronsField, nbMoleIonField};
-			type = elementComboBox.getSelectedIndex();
-			element = elementField.getText();
-			entity = entiteBox.getSelectedIndex();
-			variableConnue = knownVariableField.getText();
-			getElement(type, element);
-			
-			fieldList[entity].setText(String.valueOf(getVariable(entity, variableConnue)));
-			moleElectronField.setText(String.valueOf(setInputCharge()));
-			unknownVariableField.setText(String.valueOf(findUnknown()));
-			
-			//nbMoleElectronsField.setText();
-		}
+		frame.setVisible(true);
 		
-		
-		if (e.getSource() == convertButton) {
-			clickCount += 1;
-			System.out.println(clickCount);
-			if (clickCount % 2 != 0) {
-				convertButton.setText("Convertir en nombre");
-				unknownVariableField.setText(String.valueOf(onConvert(clickCount)));
-			}
-			else {
-				convertButton.setText("Convertir en moles");
-				unknownVariableField.setText(String.valueOf(onConvert(clickCount)));
-			}
-		}
-		
-		if (e.getSource() == resetButton) {
-			onReset();
-			chargeField.setText("0");
-			elementField.setText("");
-			knownVariableField.setText("");
-			unknownVariableField.setText("");
-			nbMoleElectronsField.setText("");
-			nbMoleIonField.setText("");
-			clickCount = 0;
-		}
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
+	public void setMouseListener(MouseListener l) {
+		addChargeButton.addMouseListener(l);
+		subtractChargeButton.addMouseListener(l);
+		confirmButton.addMouseListener(l);
+		convertButton.addMouseListener(l);
+		resetButton.addMouseListener(l);
+	}
+	
+	public String getElementText() {
+		return elementField.getText();
+	}
+	
+	public double getKnownVariableValue() {
+		return Double.parseDouble(knownVariableField.getText());
+	}
+	
+	public int getSearchTypeOptionIndex() {
+		return searchTypeBox.getSelectedIndex();
+	}
+	
+	public int getEntityTypeOptionIndex() {
+		return entityTypeBox.getSelectedIndex();
+	}
+	
+	public void setChargeFieldText(int inputCharge) {
+		chargeField.setText(String.valueOf(inputCharge));
+	}
+	
+	public void setUnknownValue(double unknownValue) {
+		unknownVariableField.setText(String.valueOf(unknownValue));
+	}
+	
+	public void setUnknownFields(double value, int index) {
+		JTextField[] displayFields = { nbMoleElectronField, nbMoleIonField };
+		displayFields[index].setText(String.valueOf(value));
+	}
+	
+	public void setConvertText(boolean convert) {
+		convertButton.setText(convert ? "Convertir en moles" : "Convertir en nombre");
+		convertLabel.setText(convert ? "Nombre d'entités d'inconnue" : "Nombre de moles d'inconnue");
+	}
+	
+	public void setMoleElectronField(int moleElectron) {
+		moleElectronField.setText(String.valueOf(moleElectron));
+	}
+	
+	public void setMoleIonField() {
+		moleIonField.setText("1");
+	}
+	
+	public void resetTextFields() {
+		chargeField.setText("0");
+		setConvertText(false);
+		JTextField[] textFieldList = {elementField, knownVariableField, moleIonField, nbMoleIonField, 
+				moleElectronField, nbMoleElectronField, unknownVariableField};
 		
+		Arrays.asList(textFieldList).stream().forEach(textField -> textField.setText(""));
+	}
+	
+	public boolean isAddChargeButton(MouseEvent e) {
+		return e.getSource() == addChargeButton;
+	}
+	
+	public boolean isSubtractChargeButton(MouseEvent e) {
+		return e.getSource() == subtractChargeButton;
+	}
+	
+	public boolean isConfirmButton(MouseEvent e) {
+		return e.getSource() == confirmButton;
+	}
+	
+	public boolean isConvertButton(MouseEvent e) {
+		return e.getSource() == convertButton;
+	}
+	
+	public boolean isResetButton(MouseEvent e) {
+		return e.getSource() == resetButton;
 	}
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 }
