@@ -1,8 +1,14 @@
 package controller;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
 public class CalculMole {
 
 	private final double CONST_AVOGADRO = 6.022E23;
+	
+	private int sigFig;
 	
 	public double crossProduct(boolean condition, double value) {
 		return condition ? 1 / value : value;
@@ -15,20 +21,14 @@ public class CalculMole {
 	 return knownValue * crossProduct(entityIndex == 0, molElectron);
 	}
 
-	public double setSigFig(double resultat, int sigFig) {
-		double formattedDouble;
-		double precision = Math.pow(10, sigFig);
-		
-		if (String.valueOf(resultat).contains("E")) {
-			String[] separateDouble = String.valueOf(resultat).split("E");
-			double valueRound = Double.parseDouble(separateDouble[0]);
-			separateDouble[0] = String.valueOf(Math.round(valueRound * precision) / precision);
-			formattedDouble = Double.parseDouble(separateDouble[0] + "E" + separateDouble[1]);
-		} else {
-			formattedDouble = Math.round(resultat * precision) / precision;
-		}
-		
-		return formattedDouble;
+	public double setSigFig(double result) {
+		MathContext significantFigures = new MathContext(sigFig, RoundingMode.UP);
+		return BigDecimal.valueOf(result)
+				.round(significantFigures)
+				.doubleValue();
 	}
 	
+	public void getSigFig(double value) {
+		this.sigFig = BigDecimal.valueOf(value).precision();
+	}
 }
