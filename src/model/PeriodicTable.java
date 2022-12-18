@@ -6,35 +6,66 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+/**
+ * Cette classe permet d'accéder aux 56 premiers éléments du tableau périodique.
+ * @author Merieme Bouisri
+ */
 public class PeriodicTable {
-	
+
 	private ArrayList<Element> elementList = new ArrayList<Element>();
 
+	/**
+	 * Constructeur sans paramètre. Permet d'accéder aux 56 premiers éléments
+	 * du tableau périodique.
+	 */
 	public PeriodicTable() {
 		readElementList();
 	}
 	
+	/**
+	 * Cette méthode permet d'accéder à un objet {@code Element} selon l'attribut recherché.
+	 * @param predicate Condition qui détermine l'attribut par lequel rechercher un élément
+	 * @return Element recherché
+	 */
 	private Element searchElement(Predicate<Element> predicate) {
-		return elementList.stream()
-				.filter(predicate)
-				.findAny()
-				.get();
+		return elementList.stream() // Traverser la liste d'éléments
+				.filter(predicate)  // Chercher celui qui correspond au prédicat
+				.findAny()          // Récupérer Optional<Element>
+				.get();             // Récupérer Element
 	}
 	
 	// Méthodes d'accès à un élément selon l'un de ses attributs
 	
+	/**
+	 * @param atomicNumber 
+	 * @return Élément correspondant au nombre atomique.
+	 */
 	public Element forNumber(int atomicNumber) {
 		return searchElement(element -> element.getAtomicNumber() == atomicNumber);
 	}
 	
+	/**
+	 * @param atomicMass
+	 * @return Élément correspondant à la masse atomique.
+	 */
 	public Element forMass(float atomicMass) {
 		return searchElement(element -> element.getAtomicMass() == atomicMass);
 	}
 	
+	/**
+	 * Note : Ne pas affecter d'accents aux voyelles, sinon le nom ne sera pas reconnu 
+	 * (Par exemple, "hydrogene" sera reconnu, mais pas "hydrogène").
+	 * @param name Nom de l'élément.
+	 * @return Élément correspondant au nom (en ignorant les majuscules).
+	 */
 	public Element forName(String name) {
 		return searchElement(element -> element.getName().equalsIgnoreCase(name));
 	}
 	
+	/**
+	 * @param symbol
+	 * @return Élément correspondant au symbole (en ignorant les majuscules).
+	 */
 	public Element forSymbol(String symbol) {
 		return searchElement(element -> element.getSymbol().equalsIgnoreCase(symbol));
 	}
