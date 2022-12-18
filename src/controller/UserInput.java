@@ -42,7 +42,9 @@ public class UserInput {
 	}
 	
 	public void setKnownVariable(double knownValue) {
+		System.out.println(knownValue);
 		this.knownValue = knownValue;
+		calculMole.getSigFig(knownValue);
 	}
 	
 	public void setKnownEntity(int entityIndex) {
@@ -86,17 +88,17 @@ public class UserInput {
 	
 	public double getMoleOfKnownVariable() {
 		this.knownValue = calculMole.convertAvogadro(knownValue, true);
-		return calculMole.setSigFig(knownValue, 2);
+		return calculMole.setSigFig(knownValue);
 	}
 	
 	public double findUnknown() {
 		this.unknownValue = calculMole.calculateUnknown(knownValue, numElectrons, knownEntity);
-		return calculMole.setSigFig(unknownValue, 2);
+		return calculMole.setSigFig(unknownValue);
 	}
 	
 	public double convertValue(boolean convert) {
 		this.unknownValue = calculMole.convertAvogadro(unknownValue, !convert);
-		return calculMole.setSigFig(unknownValue, 2);
+		return calculMole.setSigFig(unknownValue);
 	}
 	
 	public void resetValues() {
