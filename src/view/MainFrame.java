@@ -1,6 +1,3 @@
-/**
- * 
- */
 package view;
 
 import java.awt.EventQueue;
@@ -24,6 +21,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import javax.swing.JLabel;
@@ -39,39 +37,34 @@ import javax.swing.JRadioButton;
 import java.awt.Font;
 import javax.swing.UIManager;
 
-/**
- * @author merie
- *
- */
 public class MainFrame extends EventHandler {
 	
 	private JFrame frame;
 	private JPanel inputPane;
-	private JComboBox<String> searchTypeBox;
+	private JPanel calculationPanel;
 	
+	// Combo boxes
+	private JComboBox<String> searchTypeBox;
+	private JComboBox<String> entityTypeBox;
+	
+	// Textfields for input
 	private JTextField elementField;
-	private JTextField chargeField;
 	private JTextField knownVariableField;
+	
+	// TextFields for display
+	private JTextField chargeField;
 	private JTextField moleIonField;
 	private JTextField nbMoleIonField;
 	private JTextField moleElectronField;
 	private JTextField nbMoleElectronField;
 	private JTextField unknownVariableField;
 	
+	// Buttons
 	private JButton addChargeButton;
 	private JButton subtractChargeButton;
 	private JButton confirmButton;
 	private JButton convertButton;
 	private JButton resetButton;
-	private JButton[] buttonList = { addChargeButton, subtractChargeButton,confirmButton, convertButton, resetButton};
-	
-	// Remove later
-	public int type;
-	public String element;
-	public String variableConnue;
-	public int entity;
-	public Element x;
-	public int nbElectron;
 	
 	private JLabel elementSelectionLabel;
 	private JLabel chargeLabel;
@@ -85,28 +78,18 @@ public class MainFrame extends EventHandler {
 	private JLabel separatorLabel2;
 	private JLabel numberOfKnownLabel;
 	
-	
-	private JPanel calculationPanel;
-	private JComboBox<String> entityTypeBox;
-	
-	private int clickCount = 0;
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the application.
-	 */
 	public MainFrame() {
 		initialize();
 	}
 
 	private void initialize() {
+		//------------------------------------------------------
+		//              CREATING MAINFRAME
+		//------------------------------------------------------
 		frame = new JFrame();
 		frame.setBounds(100, 100, 538, 394);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
 		
 		//------------------------------------------------------
 		//              CREATING PANELS
@@ -154,7 +137,7 @@ public class MainFrame extends EventHandler {
 		knownVariableField.setColumns(10);
 		
 		//--------------------------------------------------------------
-		//                    CREATE BUTTONS
+		//                    CREATING BUTTONS
 		//--------------------------------------------------------------
 		addChargeButton = new JButton("▲");
 		addChargeButton.setMargin(new Insets(2, 2, 2, 2));
@@ -274,8 +257,6 @@ public class MainFrame extends EventHandler {
 		calculationPanel.add(separatorLabel2);
 		
 		frame.setVisible(true);
-		
-		
 	}
 	
 	public void setMouseListener(MouseListener l) {
@@ -291,7 +272,8 @@ public class MainFrame extends EventHandler {
 	}
 	
 	public double getKnownVariableValue() {
-		return Double.parseDouble(knownVariableField.getText());
+		BigDecimal knownVariable = new BigDecimal(knownVariableField.getText());
+		return knownVariable.doubleValue();
 	}
 	
 	public int getSearchTypeOptionIndex() {
@@ -331,8 +313,9 @@ public class MainFrame extends EventHandler {
 	public void resetTextFields() {
 		chargeField.setText("0");
 		setConvertText(false);
-		JTextField[] textFieldList = {elementField, knownVariableField, moleIonField, nbMoleIonField, 
-				moleElectronField, nbMoleElectronField, unknownVariableField};
+		
+		JTextField[] textFieldList = 
+			{elementField, knownVariableField, moleIonField, nbMoleIonField, moleElectronField, nbMoleElectronField, unknownVariableField};
 		
 		Arrays.asList(textFieldList).stream().forEach(textField -> textField.setText(""));
 	}
@@ -354,7 +337,7 @@ public class MainFrame extends EventHandler {
 	}
 	
 	public boolean isResetButton(MouseEvent e) {
-		return e.getSource() == resetButton;
+		return e.getSource() == resetButton; 
 	}
 
 }
