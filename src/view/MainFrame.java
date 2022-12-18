@@ -1,43 +1,29 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JComboBox;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.Point;
 import javax.swing.JTextField;
 
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Insets;
-import javax.swing.JSpinner;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
 
-import controller.UserInput;
-import model.Element;
-import javax.swing.JSeparator;
-import javax.swing.JSlider;
-import javax.swing.JTable;
-import javax.swing.JRadioButton;
-import java.awt.Font;
-import javax.swing.UIManager;
-
-public class MainFrame extends EventHandler {
+/**
+ * Cette classe contient le design de l'interface graphique créé avec WindowBuilder.
+ * Les méthodes de cette classe permettent de communiquer avec la classe {@code EventHandler}
+ * afin de traiter les données entrées par l'utilisateur.
+ * @author Merieme Bouisri
+ */
+public class MainFrame {
 	
 	private JFrame frame;
 	private JPanel inputPane;
@@ -46,6 +32,8 @@ public class MainFrame extends EventHandler {
 	// Combo boxes
 	private JComboBox<String> searchTypeBox;
 	private JComboBox<String> entityTypeBox;
+	private String[] searchType = new String[] {"NOM", "SYMBOLE", "NOMBRE ATOMIQUE"};
+	private String[] entityType = new String[] {"D'ELECTRONS", "D'IONS"};
 	
 	// Textfields for input
 	private JTextField elementField;
@@ -53,11 +41,15 @@ public class MainFrame extends EventHandler {
 	
 	// TextFields for display
 	private JTextField chargeField;
-	private JTextField moleIonField;
-	private JTextField nbMoleIonField;
-	private JTextField moleElectronField;
-	private JTextField nbMoleElectronField;
 	private JTextField unknownVariableField;
+	/** Textfield pour 1 mol d'ion (0, 0) */
+	private JTextField upperLeftVariableField;
+	/** Textfield pour nombre de moles d'ion (1, 0)*/
+	private JTextField lowerLeftVariableField;
+	/** Textfield pour mol d'électrons dans 1 mol d'ion (0, 1) */
+	private JTextField upperRightVariableField;
+	/** Textfield pour nombre de moles d'électrons (1, 1)*/
+	private JTextField lowerRightVariableField;
 	
 	// Buttons
 	private JButton addChargeButton;
@@ -66,6 +58,7 @@ public class MainFrame extends EventHandler {
 	private JButton convertButton;
 	private JButton resetButton;
 	
+	// Labels
 	private JLabel elementSelectionLabel;
 	private JLabel chargeLabel;
 	private JLabel molIonLabel;
@@ -108,9 +101,6 @@ public class MainFrame extends EventHandler {
 		//------------------------------------------------------
 		//                 CREATING COMBO BOX
 		//------------------------------------------------------
-		String[] searchType = getSearchType();
-		String[] entityType = getEntityList();
-		
 		searchTypeBox = new JComboBox<String>();
 		searchTypeBox.setOpaque(false);
 		searchTypeBox.setModel(new DefaultComboBoxModel<String>(searchType));
@@ -131,7 +121,6 @@ public class MainFrame extends EventHandler {
 		elementField.setColumns(10);
 		
 		knownVariableField = new JTextField();
-		knownVariableField.setFont(UIManager.getFont("Button.font"));
 		knownVariableField.setBounds(283, 128, 127, 20);
 		inputPane.add(knownVariableField);
 		knownVariableField.setColumns(10);
@@ -185,29 +174,33 @@ public class MainFrame extends EventHandler {
 		calculationPanel.add(unknownVariableField);
 		unknownVariableField.setColumns(10);
 		
-		moleIonField = new JTextField();
-		moleIonField.setEditable(false);
-		moleIonField.setBounds(110, 11, 23, 20);
-		calculationPanel.add(moleIonField);
-		moleIonField.setColumns(10);
 		
-		nbMoleIonField = new JTextField();
-		nbMoleIonField.setEditable(false);
-		nbMoleIonField.setColumns(10);
-		nbMoleIonField.setBounds(93, 42, 63, 20);
-		calculationPanel.add(nbMoleIonField);
+		// Text fields that display variables according to their
+		// placement in the cross product
 		
-		moleElectronField = new JTextField();
-		moleElectronField.setEditable(false);
-		moleElectronField.setColumns(10);
-		moleElectronField.setBounds(341, 11, 23, 20);
-		calculationPanel.add(moleElectronField);
+		upperLeftVariableField = new JTextField();
+		upperLeftVariableField.setEditable(false);
+		upperLeftVariableField.setBounds(110, 11, 23, 20);
+		calculationPanel.add(upperLeftVariableField);
+		upperLeftVariableField.setColumns(10);
 		
-		nbMoleElectronField = new JTextField();
-		nbMoleElectronField.setEditable(false);
-		nbMoleElectronField.setColumns(10);
-		nbMoleElectronField.setBounds(324, 42, 63, 20);
-		calculationPanel.add(nbMoleElectronField);
+		lowerLeftVariableField = new JTextField();
+		lowerLeftVariableField.setEditable(false);
+		lowerLeftVariableField.setColumns(10);
+		lowerLeftVariableField.setBounds(93, 42, 63, 20);
+		calculationPanel.add(lowerLeftVariableField);
+		
+		upperRightVariableField = new JTextField();
+		upperRightVariableField.setEditable(false);
+		upperRightVariableField.setColumns(10);
+		upperRightVariableField.setBounds(341, 11, 23, 20);
+		calculationPanel.add(upperRightVariableField);
+		
+		lowerRightVariableField = new JTextField();
+		lowerRightVariableField.setEditable(false);
+		lowerRightVariableField.setColumns(10);
+		lowerRightVariableField.setBounds(324, 42, 63, 20);
+		calculationPanel.add(lowerRightVariableField);
 		
 		//-----------------------------------------------------------
 		//                   CREATING LABELS
@@ -259,6 +252,11 @@ public class MainFrame extends EventHandler {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Méthode pour attribuer un mouseListener à chaque boutton.
+	 * Cela permet de gérer les actions à partir d'une classe différente.
+	 * @param l Classe qui contient les actions associées au MouseListener
+	 */
 	public void setMouseListener(MouseListener l) {
 		addChargeButton.addMouseListener(l);
 		subtractChargeButton.addMouseListener(l);
@@ -267,77 +265,142 @@ public class MainFrame extends EventHandler {
 		resetButton.addMouseListener(l);
 	}
 	
+	/**
+	 * @return L'élément que l'utilisateur recherche
+	 */
 	public String getElementText() {
 		return elementField.getText();
 	}
 	
+	/**
+	 * Cette méthode permet de récupérer la valeur entrée dans le knownVariableField.
+	 * @return Valeur connue dans son format original
+	 */
 	public double getKnownVariableValue() {
+		// Convertir en Big Decimal afin de conserver le format dans lequel 
+		// le double a été entré. Permet de déterminer chiffres significatifs après.
 		BigDecimal knownVariable = new BigDecimal(knownVariableField.getText());
 		return knownVariable.doubleValue();
 	}
 	
+	/**
+	 * Cette methode permet de recuperer l'indice de selection dans searchTypeBox.
+	 * @return 0 -> Name, 1 -> Symbol, 2 -> Atomic Number
+	 */
 	public int getSearchTypeOptionIndex() {
 		return searchTypeBox.getSelectedIndex();
 	}
 	
+	/**
+	 * Cette methode permet de recuperer l'indice de selection dans entityTypeBox.
+	 * @return 0 -> Electrons, 1 -> Ions
+	 */
 	public int getEntityTypeOptionIndex() {
 		return entityTypeBox.getSelectedIndex();
 	}
 	
+	/**
+	 * Cette méthode permet d'afficher la valeur de la charge de l'ion en même temps que
+	 * l'utilisateur la modifie.
+	 * @param inputCharge Charge entrée
+	 */
 	public void setChargeFieldText(int inputCharge) {
 		chargeField.setText(String.valueOf(inputCharge));
 	}
 	
+	/**
+	 * Cette méthode permet d'inscrire la valeur de l'inconnue dans le textField approprié
+	 * @param unknownValue Valeur inconnue
+	 */
 	public void setUnknownValue(double unknownValue) {
 		unknownVariableField.setText(String.valueOf(unknownValue));
 	}
 	
-	public void setUnknownFields(double value, int index) {
-		JTextField[] displayFields = { nbMoleElectronField, nbMoleIonField };
-		displayFields[index].setText(String.valueOf(value));
+	/**
+	 * Cette méthode permet d'insérer la valeur connue dans le textField approprié.
+	 * Si l'entité connue sont les électrons, index = 0. Si ce sont les ions, index = 1.
+	 * @param value Valeur à montrer
+	 * @param entityIndex Indice du textField ou insérer la valeur
+	 */
+	public void setKnownValueDisplayField(double value, int entityIndex) {
+		JTextField[] displayFields = { lowerRightVariableField, lowerLeftVariableField };
+		displayFields[entityIndex].setText(String.valueOf(value));
 	}
 	
+	/**
+	 * Cette méthode contient les chaînes de charactère attribuées à {@code convertButton} et {@code convertLabel}
+	 * pour indiquer la direction des conversions avec le nombre d'Avogadro.
+	 * @param convert {@code true} si la valeur de l'inconnue doit etre en nombre, {@code false} si la valeur de 
+	 * l'inconnue doit etre en nombre de moles.
+	 */
 	public void setConvertText(boolean convert) {
 		convertButton.setText(convert ? "Convertir en moles" : "Convertir en nombre");
 		convertLabel.setText(convert ? "Nombre d'entités d'inconnue" : "Nombre de moles d'inconnue");
 	}
 	
-	public void setMoleElectronField(int moleElectron) {
-		moleElectronField.setText(String.valueOf(moleElectron));
+	/**
+	 * Cette méthode permet d'afficher le nombre d'électrons dans 1 ion dans le textField (0, 1).
+	 * @param molElectron Nombre d'électrons dans 1 mol d'ion.
+	 */
+	public void setUpperRightVariableField(int molElectron) {
+		upperRightVariableField.setText(String.valueOf(molElectron));
 	}
 	
-	public void setMoleIonField() {
-		moleIonField.setText("1");
+	/**
+	 * Cette méthode permet d'afficher la valeur "1" dans le textField (0,0).
+	 * Ce textField représente 1 mol d'ion.
+	 */
+	public void setUpperLeftVariableField() {
+		upperLeftVariableField.setText("1");
 	}
 	
+	/**
+	 * Méthode pour réinitialisé le text dans les display textFields.
+	 */
 	public void resetTextFields() {
 		chargeField.setText("0");
 		setConvertText(false);
 		
 		JTextField[] textFieldList = 
-			{elementField, knownVariableField, moleIonField, nbMoleIonField, moleElectronField, nbMoleElectronField, unknownVariableField};
+			{elementField, knownVariableField, upperLeftVariableField, lowerLeftVariableField, upperRightVariableField, lowerRightVariableField, unknownVariableField};
 		
 		Arrays.asList(textFieldList).stream().forEach(textField -> textField.setText(""));
 	}
 	
+	// Méthodes récupérer informer d'autres classes qu'un certain boutton a été cliqué
+	
+	/**
+	 * (@code addChargeButton) a été cliqué.
+	 */
 	public boolean isAddChargeButton(MouseEvent e) {
 		return e.getSource() == addChargeButton;
 	}
 	
+	/**
+	 * (@code subtractChargeButton) a été cliqué.
+	 */
 	public boolean isSubtractChargeButton(MouseEvent e) {
 		return e.getSource() == subtractChargeButton;
 	}
 	
+	/**
+	 * (@code confirmButton) a été cliqué.
+	 */
 	public boolean isConfirmButton(MouseEvent e) {
 		return e.getSource() == confirmButton;
 	}
 	
+	/**
+	 * {@code convertButton} a été cliqué.
+	 */
 	public boolean isConvertButton(MouseEvent e) {
 		return e.getSource() == convertButton;
 	}
 	
+	/**
+	 * {@code resetButton} a été cliqué.
+	 */
 	public boolean isResetButton(MouseEvent e) {
 		return e.getSource() == resetButton; 
 	}
-
 }
