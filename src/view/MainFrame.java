@@ -1,21 +1,22 @@
 package view;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
-
 import javax.swing.JButton;
+import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
-
-import javax.swing.JLabel;
 
 /**
  * Cette classe contient le design de l'interface graphique créé avec WindowBuilder.
@@ -24,10 +25,10 @@ import javax.swing.JLabel;
  * @author Merieme Bouisri
  */
 public class MainFrame {
-	
+	// Frame and panels
 	private JFrame frame;
 	private JPanel inputPane;
-	private JPanel calculationPanel;
+	private JPanel calculationPane;
 	
 	// Combo boxes
 	private JComboBox<String> searchTypeBox;
@@ -93,10 +94,10 @@ public class MainFrame {
 		frame.getContentPane().add(inputPane, BorderLayout.NORTH);
 		inputPane.setLayout(null);
 		
-		calculationPanel = new JPanel();
-		calculationPanel.setBounds(0, 195, 522, 118);
-		frame.getContentPane().add(calculationPanel);
-		calculationPanel.setLayout(null);
+		calculationPane = new JPanel();
+		calculationPane.setBounds(0, 195, 522, 118);
+		frame.getContentPane().add(calculationPane);
+		calculationPane.setLayout(null);
 		
 		//------------------------------------------------------
 		//                 CREATING COMBO BOX
@@ -151,7 +152,7 @@ public class MainFrame {
 		
 		convertButton = new JButton("Convertir en nombre");
 		convertButton.setBounds(318, 90, 173, 23);
-		calculationPanel.add(convertButton);
+		calculationPane.add(convertButton);
 	
 		resetButton = new JButton("RESET");
 		resetButton.setBounds(226, 324, 89, 23);
@@ -171,7 +172,7 @@ public class MainFrame {
 		unknownVariableField = new JTextField();
 		unknownVariableField.setEditable(false);
 		unknownVariableField.setBounds(222, 91, 86, 20);
-		calculationPanel.add(unknownVariableField);
+		calculationPane.add(unknownVariableField);
 		unknownVariableField.setColumns(10);
 		
 		
@@ -181,26 +182,26 @@ public class MainFrame {
 		upperLeftVariableField = new JTextField();
 		upperLeftVariableField.setEditable(false);
 		upperLeftVariableField.setBounds(110, 11, 23, 20);
-		calculationPanel.add(upperLeftVariableField);
+		calculationPane.add(upperLeftVariableField);
 		upperLeftVariableField.setColumns(10);
 		
 		lowerLeftVariableField = new JTextField();
 		lowerLeftVariableField.setEditable(false);
 		lowerLeftVariableField.setColumns(10);
 		lowerLeftVariableField.setBounds(93, 42, 63, 20);
-		calculationPanel.add(lowerLeftVariableField);
+		calculationPane.add(lowerLeftVariableField);
 		
 		upperRightVariableField = new JTextField();
 		upperRightVariableField.setEditable(false);
 		upperRightVariableField.setColumns(10);
 		upperRightVariableField.setBounds(341, 11, 23, 20);
-		calculationPanel.add(upperRightVariableField);
+		calculationPane.add(upperRightVariableField);
 		
 		lowerRightVariableField = new JTextField();
 		lowerRightVariableField.setEditable(false);
 		lowerRightVariableField.setColumns(10);
 		lowerRightVariableField.setBounds(324, 42, 63, 20);
-		calculationPanel.add(lowerRightVariableField);
+		calculationPane.add(lowerRightVariableField);
 		
 		//-----------------------------------------------------------
 		//                   CREATING LABELS
@@ -223,31 +224,31 @@ public class MainFrame {
 		
 		molIonLabel = new JLabel("mol ion");
 		molIonLabel.setBounds(143, 14, 46, 14);
-		calculationPanel.add(molIonLabel);
+		calculationPane.add(molIonLabel);
 		
 		molElectronLabel = new JLabel("mol électrons");
 		molElectronLabel.setBounds(372, 14, 94, 14);
-		calculationPanel.add(molElectronLabel);
+		calculationPane.add(molElectronLabel);
 		
 		separatorLabel = new JLabel(".................................................");
 		separatorLabel.setBounds(180, 14, 148, 14);
-		calculationPanel.add(separatorLabel);
+		calculationPane.add(separatorLabel);
 		
 		nbMolIonLabel = new JLabel("mol ion");
 		nbMolIonLabel.setBounds(166, 45, 46, 14);
-		calculationPanel.add(nbMolIonLabel);
+		calculationPane.add(nbMolIonLabel);
 		
 		nbMolElectronLabel = new JLabel("mol électrons");
 		nbMolElectronLabel.setBounds(397, 45, 94, 14);
-		calculationPanel.add(nbMolElectronLabel);
+		calculationPane.add(nbMolElectronLabel);
 		
 		convertLabel = new JLabel("Nombre de moles d'inconnue :");
 		convertLabel.setBounds(48, 94, 183, 14);
-		calculationPanel.add(convertLabel);
+		calculationPane.add(convertLabel);
 		
 		separatorLabel2 = new JLabel(".................................................");
 		separatorLabel2.setBounds(203, 45, 111, 14);
-		calculationPanel.add(separatorLabel2);
+		calculationPane.add(separatorLabel2);
 		
 		frame.setVisible(true);
 	}

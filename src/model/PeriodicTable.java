@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 
 /**
  * Cette classe permet d'accéder aux 56 premiers éléments du tableau périodique.
- * @author Merieme Bouisri
  */
 public class PeriodicTable {
 

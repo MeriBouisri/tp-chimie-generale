@@ -79,7 +79,6 @@ public class UserInput {
 	 * @return Valeur convertie de {@code unknownValue}.
 	 */
 	public double convertValue(boolean convert) {
-		
 		this.unknownValue = calculMole.convertAvogadro(unknownValue, convert);
 		return calculMole.setSigFig(unknownValue);
 	}

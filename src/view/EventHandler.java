@@ -5,14 +5,14 @@ import java.awt.event.MouseListener;
 
 import controller.UserInput;
 
-public class EventHandler extends UserInput implements MouseListener {
+public class EventHandler implements MouseListener {
 	
 	MainFrame window;
-	UserInput input;
+	UserInput ui = new UserInput();
 	
 	private int charge;
-	private int clickCount = 1;
-
+	private int convertAvogadro = 1;
+	
 	public void listenTo(MainFrame window) {
 		this.window = window;
 	}
@@ -27,33 +27,40 @@ public class EventHandler extends UserInput implements MouseListener {
 		window.setChargeFieldText(charge);
 	}
 	
+	/**
+	 * Envoyer toutes les variables connues à {@code UserInput}
+	 * pour effectuer le calcul de moles.
+	 */
 	private void onConfirm() {
-		setElementSearchType(window.getSearchTypeOptionIndex());
-		setElement(window.getElementText());
-		setInputCharge(charge);
-		setKnownVariable(window.getKnownVariableValue());
-		setKnownEntity(window.getEntityTypeOptionIndex());
+		ui.setElementSearchType(window.getSearchTypeOptionIndex());
+		ui.setElement(window.getElementText());
+		ui.setInputCharge(charge);
+		ui.setKnownVariable(window.getKnownVariableValue());
+		ui.setKnownEntity(window.getEntityTypeOptionIndex());
+		
 		setDisplayText();
 	}
 	
 	private void setDisplayText() {
-		window.setMoleElectronField(getNumElectrons());
-		window.setMoleIonField();
-		window.setUnknownFields(getMoleOfKnownVariable(), window.getEntityTypeOptionIndex());
-		window.setUnknownValue(findUnknown());
+		window.setUpperRightVariableField(ui.getNumElectrons());
+		window.setUpperLeftVariableField();
+		window.setKnownValueDisplayField(ui.getMoleOfKnownVariable(), window.getEntityTypeOptionIndex());
+		
+		// Afficher la valeur de la variable inconnue
+		window.setUnknownValue(ui.findUnknown());
 	}
 	
 	private void onConvert() {
-		clickCount++;
-		boolean convert = clickCount % 2 == 0;
+		convertAvogadro++;
+		boolean convert = convertAvogadro % 2 != 0;
 		window.setConvertText(convert);
-		window.setUnknownValue(convertValue(convert));
+		window.setUnknownValue(ui.convertValue(convert));
 	}
 	
 	private void onReset() {
-		resetValues();
-		clickCount = 1;
+		ui.resetValues();
 		window.resetTextFields();
+		convertAvogadro = 1;
 	}
 	
 	@Override
